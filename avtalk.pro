@@ -13,8 +13,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    media_connection.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    media_connection.h
 
 FORMS    += mainwindow.ui
