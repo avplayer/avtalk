@@ -24,46 +24,20 @@
      </rect>
     </property>
     <property name="text">
-     <string>server:</string>
+     <string>url:</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QLineEdit" name="edit_url">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>60</y>
-      <width>111</width>
-      <height>18</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>streamName:</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="edit_server">
-    <property name="geometry">
-     <rect>
-      <x>140</x>
+      <x>70</x>
       <y>20</y>
-      <width>113</width>
+      <width>241</width>
       <height>26</height>
      </rect>
     </property>
     <property name="text">
-     <string>vps.hyq.me</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="edit_stream_name">
-    <property name="geometry">
-     <rect>
-      <x>140</x>
-      <y>60</y>
-      <width>113</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>live</string>
+     <string>rtmp://vps.hyq.me/live/livestream</string>
     </property>
    </widget>
    <widget class="QPushButton" name="button_publish">

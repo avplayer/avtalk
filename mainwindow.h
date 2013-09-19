@@ -1,8 +1,7 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
 #include <QMainWindow>
-#include <boost/shared_ptr.hpp>
+#include "common.h"
 
 namespace Ui {
 class MainWindow;
@@ -10,12 +9,14 @@ class MainWindow;
 
 namespace avtalk {
 
+class media_connection;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(asio::io_service& io_service, QWidget *parent = 0);
     ~MainWindow();
 
 private slots:
@@ -23,9 +24,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-
+    asio::io_service& io_service_;
+    boost::thread media_connection_thread_;
     boost::shared_ptr<media_connection> media_connection_;
 };
 }
-
-#endif // MAINWINDOW_H
