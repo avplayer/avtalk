@@ -1,27 +1,26 @@
 #include "audio_capture.h"
-#include <pulse/error.h>
 #include <boost/date_time.hpp>
 
 namespace avtalk {
 audio_capture::audio_capture()
+	: running_(true)
+	, formatCtx_(NULL)
 {
-    pa_sample_spec ss;
-    ss.channels = 1;
-    ss.format = PA_SAMPLE_S16LE;
-    ss.rate = 16000;
-    s = pa_simple_new(NULL, "avtalk", PA_STREAM_RECORD, NULL, "capture", &ss, NULL, NULL, NULL);
-    if(s == NULL)
-    {
-        throw "cannot init pulseaudio";
-    }
+    avdevice_register_all();
+    AVInputFormat* inputFmt = av_find_input_format("pulse");
+    AVDictionary* options = NULL;
+    av_dict_set(&options, "sample_rate", "16000", 0);
+    av_dict_set(&options, "channels", "1", 0);
+    avformat_open_input(&formatCtx_, "default", inputFmt, &options);
+    av_dict_free(&options);
 }
 
 audio_capture::~audio_capture()
 {
-    pa_simple_free(s);
+    avformat_close_input(&formatCtx_);
 }
 
-void audio_capture::start()
+void audio_capture::exec()
 {
     using namespace boost::posix_time;
     char data[320];
@@ -30,13 +29,13 @@ void audio_capture::start()
     ptime t0 = microsec_clock::local_time();
     while(running_)
     {
-        if(pa_simple_read(s, data, sizeof(data), &error) < 0)
-        {
-            std::cerr << "error code: " << pa_strerror(error) << std::endl;
-            break;
-        }
+    	AVPacket pkt;
+    	av_init_packet(&pkt);
+    	av_read_frame(formatCtx_, &pkt);
+    	std::cout << pkt.size << std::endl;
         time_duration d = microsec_clock::local_time() - t0;
         read_frame((uint8_t*)data, sizeof(data), d.total_milliseconds());
+    	av_free_packet(&pkt);
     }
 }
 
